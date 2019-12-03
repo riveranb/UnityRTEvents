@@ -5,7 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class DrawScreen : MonoBehaviour
 {
-    public RenderTexture mRT;
+    private RenderTexture mRT;
+
+    private void Start()
+    {
+        mRT = Camera.main.targetTexture;
+        Camera.main.aspect = mRT.width / mRT.height;
+    }
 
     // Start is called before the first frame update
     private void OnPreRender()
