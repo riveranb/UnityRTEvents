@@ -6,42 +6,39 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Soteria.DcmRecons
+[RequireComponent(typeof(Camera))]
+public class FullRenderTarget : MonoBehaviour
 {
-    [RequireComponent(typeof(Camera))]
-    public class FullRenderTarget : MonoBehaviour
+    #region _Members
+    private Camera mCam;
+    #endregion
+
+    #region _Methods
+    public RenderTexture RecreateRenderTexture()
     {
-        #region _Members
-        private Camera mCam;
-        #endregion
-
-        #region _Methods
-        public RenderTexture RecreateRenderTexture()
+        if (mCam.targetTexture)
         {
-            if (mCam.targetTexture)
-            {
-                mCam.targetTexture.Release();
-            }
-
-            var rt = new RenderTexture(Screen.width, Screen.height, 24,
-                RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
-            rt.useMipMap = false;
-            rt.Create();
-
-            mCam.targetTexture = rt;
-            return rt;
+            mCam.targetTexture.Release();
         }
-        #endregion
 
-        #region _Unity_MonoBehavior
-        private void Awake()
-        {
-            mCam = GetComponent<Camera>();
+        var rt = new RenderTexture(Screen.width, Screen.height, 24,
+            RenderTextureFormat.Default, RenderTextureReadWrite.Linear);
+        rt.useMipMap = false;
+        rt.Create();
 
-            RecreateRenderTexture();
-        }
-        #endregion
-
+        mCam.targetTexture = rt;
+        return rt;
     }
+    #endregion
+
+    #region _Unity_MonoBehavior
+    private void Awake()
+    {
+        mCam = GetComponent<Camera>();
+
+        RecreateRenderTexture();
+    }
+    #endregion
+
 }
 
